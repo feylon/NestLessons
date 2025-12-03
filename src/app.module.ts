@@ -8,11 +8,17 @@ import { ChangepasswordService } from './changepassword/changepassword.service';
 import { ChangepasswordModule } from './changepassword/changepassword.module';
 import { TeacherModule } from './teacher/teacher.module';
 import { studentModule } from './student/student.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
-  imports: [BioMOdule, AuthModule, ChangepasswordModule, TeacherModule, studentModule],
+  imports: [BioMOdule, AuthModule, ChangepasswordModule, TeacherModule, studentModule,
+    
+    
+  ],
+  
   
   controllers: [AppController, ChangepasswordController],
   providers: [AppService, ChangepasswordService],
+  
 })
 export class AppModule {}
