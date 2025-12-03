@@ -1,0 +1,17 @@
+
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { Observable } from 'rxjs';
+
+@Injectable()
+export class RolesGuard implements CanActivate {
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    const role : string = "superadmin"; 
+    if(role == 'superadmin') return true;
+    else return false
+    return false;
+    
+    return true;
+  }
+}
