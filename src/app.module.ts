@@ -1,24 +1,27 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { BioMOdule } from './bio/bio.module';
-import { AuthModule } from './auth/auth.module';
-import { ChangepasswordController } from './changepassword/changepassword.controller';
-import { ChangepasswordService } from './changepassword/changepassword.service';
-import { ChangepasswordModule } from './changepassword/changepassword.module';
-import { TeacherModule } from './teacher/teacher.module';
-import { studentModule } from './student/student.module';
-import { ThrottlerModule } from '@nestjs/throttler';
+import { ConfigModule } from '@nestjs/config';
+import { loginMid } from './login.mid';
+import { userModule } from './users/user.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [BioMOdule, AuthModule, ChangepasswordModule, TeacherModule, studentModule,
+  imports: [
+MongooseModule.forRoot('mongodb://localhost/salom'),
     
-    
-  ],
-  
-  
-  controllers: [AppController, ChangepasswordController],
-  providers: [AppService, ChangepasswordService],
-  
+    userModule, ConfigModule.forRoot({
+    isGlobal: true,
+    envFilePath: ".test.env"
+  })],
+  controllers: [AppController],
+  providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(loginMid)
+      .exclude('/users/login')
+      .forRoutes('*')
+
+  }
+}
